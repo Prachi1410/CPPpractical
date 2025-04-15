@@ -1,0 +1,123 @@
+#include <iostream>
+ using namespace std;
+ 
+ class Person
+ {
+ protected:
+     string name;
+     int age;
+ 
+ public:
+     
+     Person(string n = "unknown", int a = 0)
+     {
+         name = n;
+         age = a;
+     }
+ 
+     
+     void displayPerson() const
+     {
+         cout << "Name: " << name << ", Age: " << age << endl;
+     }
+ };
+ 
+ class Employee : public Person
+ {
+ protected:
+     int employeeID;
+ 
+ public:
+     
+     Employee(string n = "unknown", int a = 0, int id = 0) : Person(n, a)
+     {
+         employeeID = id;
+     }
+ 
+     
+     void displayEmployee() const
+     {
+         displayPerson();
+         cout << "Employee ID: " << employeeID << endl;
+     }
+ };
+ 
+ class Manager : public Employee
+ {
+ private:
+     string department;
+ 
+ public:
+     
+     Manager(string n = "uknown", int a = 0, int id = 0, string dept = "") : Employee(n, a, id)
+     {
+         department = dept;
+     }
+ 
+     
+     void displayManager() const
+     {
+         displayEmployee();
+         cout << "Department: " << department << endl;
+     }
+ 
+     
+     int getEmployeeID() const
+     {
+         return employeeID;
+     }
+ };
+ 
+ int main()
+ {
+     const int MAX_MANAGERS = 100;
+     Manager managers[MAX_MANAGERS];
+     int n;
+ 
+     cout << "Enter number of managers (max:100):";
+     cin >> n;
+ 
+     
+     if (n > MAX_MANAGERS || n <= 0)
+     {
+         cout << "Invalid number of managers!" << endl;
+         return 1;
+     }
+ 
+     for (int i = 0; i < n; ++i)
+     {
+         string name, dept;
+         int age, id;
+ 
+         cout << endl
+              << "Enter details for Manager " << i + 1 << ":" << endl;
+         cout << "Name: ";
+         cin.ignore();
+         getline(cin, name);
+ 
+         cout << "Age: ";
+         cin >> age;
+ 
+         cout << "Employee ID: ";
+         cin >> id;
+ 
+         cin.ignore();
+         cout << "Department: ";
+         getline(cin, dept);
+ 
+         managers[i] = Manager(name, age, id, dept);
+     }
+ 
+     cout << endl
+          << "=== Organization Managers List ===" << endl;
+     for (int i = 0; i < n; ++i)
+     {
+         cout << endl
+              << "Manager " << i + 1 << ":" << endl;
+         managers[i].displayManager();
+     }
+ 
+     
+ 
+     return 0;
+ }
