@@ -1,0 +1,90 @@
+include <iostream>
+ using namespace std;
+ 
+ class Shape
+ {
+ protected:
+     double radius;
+ 
+ public:
+     
+     Shape(double r = 0)
+     {
+         radius = r;
+     }
+ 
+     
+     void setRadius(double r)
+     {
+         radius = r;
+     }
+ 
+     
+     double getRadius() const
+     {
+         return radius;
+     }
+ };
+ 
+ class Circle : public Shape
+ {
+ public:
+     
+     Circle(double r = 0) : Shape(r) {}
+ 
+     
+     double calculateArea() const
+     {
+         return (22 / 7) * radius * radius; 
+     }
+ 
+     
+     void display()
+     {
+         cout << "Radius: " << radius << ", Area: " << calculateArea() << endl;
+     }
+ };
+ 
+ int main()
+ {
+     
+     cout << "==== Static Circle Array ====" << endl;
+ 
+     
+     Circle circlesStatic[3] = {Circle(3.12), Circle(5.5), Circle(13.0)};
+ 
+     for (int i = 0; i < 5; ++i)
+     {
+         cout << "Circle " << i + 1 << ": ";
+         circlesStatic[i].display();
+     }
+ 
+     cout << endl
+          << "====== Dynamic Number of Circles Using Array =====" << endl;
+ 
+     int n;
+     cout << "Enter number of circles: ";
+     cin >> n;
+ 
+     Circle circlesDynamic[n];
+ 
+     
+     for (int i = 0; i < n; ++i)
+     {
+         double r;
+         cout << "Enter radius for circle " << i + 1 << ": ";
+         cin >> r;
+         circlesDynamic[i].setRadius(r); 
+     }
+ 
+     
+     for (int i = 0; i < n; ++i)
+     {
+         cout << "Circle " << i + 1 << ": ";
+         circlesDynamic[i].display();
+     }
+ 
+     
+ 
+     return 0;
+ }
