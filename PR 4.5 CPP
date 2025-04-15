@@ -1,0 +1,88 @@
+#include <iostream>
+using namespace std;
+
+const int MAX = 100;
+
+class student {
+protected:
+    float marks;
+
+public:
+    void setmarks(float m) {
+        marks = m;
+    }
+
+    virtual string computeGrade() = 0;
+
+    student() {}
+    virtual ~student() {}
+};
+
+class Undergraduate : public student {
+public:
+    string computeGrade() override {
+        if (marks >= 85) return "A";
+        else if (marks >= 75) return "B";
+        else if (marks >= 60) return "C";
+        else return "F";
+    }
+};
+
+class postgraduate : public student {
+public:
+    string computeGrade() override {
+        if (marks >= 85) return "A";
+        else if (marks >= 75) return "B";
+        else if (marks >= 60) return "C";
+        else return "F";
+    }
+};
+
+int main() {
+    student* students[MAX];
+    int n;
+
+    cout << "Enter the number of students: ";
+    cin >> n;
+
+    if (n > MAX) {
+        cout << "Maximum limit exceeded (100 students max)." << endl;
+        return 1;
+    }
+
+    for (int i = 0; i < n; i++) {
+        int type;
+        float m;
+
+        cout << "Enter student type (1 for UG, 2 for PG): " << endl;
+        cin >> type;
+        cout << "Enter the marks: ";
+        cin >> m;
+
+        student* s = nullptr;
+
+        if (type == 1) {
+            s = new Undergraduate();
+        } else if (type == 2) {
+            s = new postgraduate();
+        } else {
+            cout << "Invalid student type. Skipping..." << endl;
+            continue;
+        }
+
+        s->setmarks(m);
+        students[i] = s;
+    }
+
+    cout << "Student Grades:" << endl;
+    for (int i = 0; i < n; ++i) {
+        if (students[i]) {
+            cout << "Student " << i + 1 << " Grade: " << students[i]->computeGrade() << endl;
+        }
+    }
+
+    for (int i = 0; i < n; ++i) {
+        delete students[i];
+    }
+
+    return  0
