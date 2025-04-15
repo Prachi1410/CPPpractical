@@ -1,0 +1,106 @@
+#include <iostream>
+using namespace std;
+
+class Fuel {
+protected:
+    string fuelname;
+public:
+    Fuel(string fn = "") : fuelname(fn) {}
+    void displayfuel() {
+        cout << "Fuel: " << fuelname << endl;
+    }
+};
+
+class Brand {
+protected:
+    string brandname;
+public:
+    Brand(string bn = "") : brandname(bn) {}
+    void displaybrand() {
+        cout << "Brand: " << brandname << endl;
+    }
+};
+
+class car : public Fuel, public Brand {
+protected:
+    string carname;
+public:
+    car(string fn = "", string bn = "", string cn = "") 
+        : Fuel(fn), Brand(bn), carname(cn) {}
+    
+    void displaycar() {
+        cout << "Car: " << carname << endl;
+    }
+};
+
+// Custom queue using array
+const int MAX = 100;
+class CarQueue {
+private:
+    car queue[MAX];
+    int front;
+    int rear;
+
+public:
+    CarQueue() {
+        front = 0;
+        rear = 0;
+    }
+
+    bool isFull() {
+        return rear == MAX;
+    }
+
+    bool isEmpty() {
+        return front == rear;
+    }
+
+    void enqueue(car c) {
+        if (!isFull()) {
+            queue[rear++] = c;
+        } else {
+            cout << "Queue is full!\n";
+        }
+    }
+
+    car dequeue() {
+        if (!isEmpty()) {
+            return queue[front++];
+        } else {
+            cout << "Queue is empty!\n";
+            return car(); // Return default object
+        }
+    }
+};
+
+int main() {
+    CarQueue cq;
+    int n;
+
+    cout << "How many entries do you want to enter ";
+    cin >> n;
+
+    for (int i = 0; i < n; i++) {
+        string fuel, brand, carname;
+        cout << "\nEnter the Fuel name: ";
+        cin >> fuel;
+        cout << "Enter the Brand name: ";
+        cin >> brand;
+        cout << "Enter the Car name: ";
+        cin >> carname;
+
+        car c(fuel, brand, carname);
+        cq.enqueue(c);
+    }
+
+    cout << "--- Displaying Cars in Queue ---"<<endl;
+    while (!cq.isEmpty()) {
+        car c = cq.dequeue();
+        c.displaycar();
+        c.displaybrand();
+        c.displayfuel();
+        
+    }
+
+    return 0;
+}
