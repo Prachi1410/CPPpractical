@@ -1,0 +1,157 @@
+#include <iostream>
+using namespace std;
+
+
+class Bankaccount {
+protected:
+    string name;
+    double balance;
+
+public:
+    Bankaccount(string n, double bn) : name(n), balance(bn) {}
+    void deposit(double amt) {
+        balance += amt;
+        cout << "Deposited: " << amt << ", Balance: " << balance << endl;
+    }
+    int withdraw(double amt) {
+        if (balance >= amt) {
+            balance -= amt;
+            cout << "Withdrawn: " << amt << ", Balance: " << balance << endl;
+            return 1;
+        } else {
+            cout << "Insufficient balance!\n";
+            return 0;
+        }
+    }
+    double getbalance() {
+        return balance;
+    }
+};
+
+class Savingacc : public Bankaccount {
+public:
+    Savingacc(string n, double bn) : Bankaccount(n, bn) {}
+};
+
+
+struct Transaction {
+    string type;
+    double amt;
+};
+
+
+const int MAX = 100;
+class TransactionStack {
+private:
+    Transaction arr[MAX];
+    int top;
+
+public:
+    TransactionStack() {
+        top = -1;
+    }
+
+    bool isEmpty() {
+        return top == -1;
+    }
+
+    bool isFull() {
+        return top == MAX - 1;
+    }
+
+    void push(Transaction t) {
+        if (!isFull()) {
+            arr[++top] = t;
+        } else {
+            cout << "Transaction history full!\n";
+        }
+    }
+
+    Transaction pop() {
+        if (!isEmpty()) {
+            return arr[top--];
+        } else {
+            cout << "No transaction to undo.\n";
+            return {"none", 0.0};
+        }
+    }
+};
+
+
+void showMenu() {
+    cout << "\n--- Menu ---" << endl;
+    cout << "1. Deposit" << endl;
+    cout << "2. Withdraw" << endl;
+    cout << "3. Undo Last Transaction" << endl;
+    cout << "4. Show Balance" << endl;
+    cout << "5. Exit" << endl;
+    cout << "Enter your choice: ";
+}
+
+int main() {
+    string type;
+    int choice;
+    double amt;
+    TransactionStack History;
+
+    cout << "Enter the type of Account (saving): ";
+    cin >> type;
+    cout << "Enter your Name: ";
+    string name;
+    cin >> name;
+    cout << "Enter Initial Balance: ";
+    double bal;
+    cin >> bal;
+
+    if (type == "saving") {
+        Savingacc save(name, bal);
+
+        do {
+            showMenu();
+            cin >> choice;
+
+            switch (choice) {
+            case 1:
+                cout << "Enter amount: ";
+                cin >> amt;
+                save.deposit(amt);
+                History.push({"deposit", amt});
+                break;
+
+            case 2:
+                cout << "Enter amount: ";
+                cin >> amt;
+                if (save.withdraw(amt)) {
+                    History.push({"withdraw", amt});
+                }
+                break;
+
+            case 3: {
+                Transaction last = History.pop();
+                if (last.type == "deposit") {
+                    save.withdraw(last.amt);
+                    cout << "Undid deposit of " << last.amt << endl;
+                } else if (last.type == "withdraw") {
+                    save.deposit(last.amt);
+                    cout << "Undid withdrawal of " << last.amt << endl;
+                }
+                break;
+            }
+
+            case 4:
+                cout << "Current Balance: " << save.getbalance() << endl;
+                break;
+
+            case 5:
+                cout << "Exiting..." << endl;
+                break;
+
+            default:
+                cout << "Invalid Input. Try again!" << endl;
+            }
+        } while (choice != 5);
+    }
+
+    
+    return 0;
+}
