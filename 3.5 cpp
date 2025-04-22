@@ -1,0 +1,33 @@
+#include <iostream>
+using namespace std;
+
+// Recursive function to calculate super digit
+int superDigit(long long n) {
+    if (n < 10) return n;  
+    long long sum = 0;
+    while (n > 0) {
+        sum += n % 10;
+        n /= 10;
+    }
+    return superDigit(sum);  // Recursive call
+}
+
+// Wrapper to handle string input and repetition (k)
+int superDigit(string n, int k) {
+    long long initialSum = 0;
+    for (char ch : n) {
+        initialSum += ch - '0';  // Convert char to int and add
+    }
+    initialSum *= k;  
+    return superDigit(initialSum);
+}
+
+int main() {
+    string n = "9875";
+    int k = 4;
+
+    int result = superDigit(n, k);
+    cout << "Super digit is: " << result << endl;
+
+    return 0;
+}
